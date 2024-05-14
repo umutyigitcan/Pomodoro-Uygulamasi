@@ -9,5 +9,18 @@
         android:id="@+id/pomodoroEkrani"
         android:name="com.example.pomodoro.PomodoroEkrani"
         android:label="fragment_pomodoro_ekrani"
-        tools:layout="@layout/fragment_pomodoro_ekrani" />
+        tools:layout="@layout/fragment_pomodoro_ekrani" >
+        <action
+            android:id="@+id/action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani"
+            app:destination="@id/pomodoroSureAyarlamaEkrani" />
+    </fragment>
+    <fragment
+        android:id="@+id/pomodoroSureAyarlamaEkrani"
+        android:name="com.example.pomodoro.PomodoroSureAyarlamaEkrani"
+        android:label="fragment_pomodoro_sure_ayarlama_ekrani"
+        tools:layout="@layout/fragment_pomodoro_sure_ayarlama_ekrani" >
+        <action
+            android:id="@+id/action_pomodoroSureAyarlamaEkrani_to_pomodoroEkrani"
+            app:destination="@id/pomodoroEkrani" />
+    </fragment>
 </navigation>
