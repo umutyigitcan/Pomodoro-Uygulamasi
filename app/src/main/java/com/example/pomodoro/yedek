@@ -1,0 +1,108 @@
+package com.example.pomodoro
+
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
+import com.example.pomodoro.databinding.FragmentPomodoroEkraniBinding
+
+
+class PomodoroEkrani : Fragment() {
+
+
+    private lateinit var tasarim:FragmentPomodoroEkraniBinding
+    private var kalanSaniye =0
+    private var molaKalanSaniye=0
+    private var handler=Handler(Looper.getMainLooper())
+    private val myHandler = Handler(Looper.getMainLooper())
+    private val molaGeriSayimIslemi=object :Runnable{
+        override fun run() {
+            if (molaKalanSaniye > 0) {
+                tasarim.constraintlayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue))
+                tasarim.constraintLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue2))
+                val dakika = molaKalanSaniye / 60
+                val saniye = molaKalanSaniye % 60
+                tasarim.gecendakika.text = String.format("%02d:%02d", dakika, saniye)
+                molaKalanSaniye--
+                myHandler.postDelayed(this, 1000) // 1 saniye gecikme
+            } else {
+                tasarim.constraintlayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue))
+                tasarim.constraintLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue2))
+                Toast.makeText(requireContext(),"Çalışma zamanı...",Toast.LENGTH_SHORT).show()
+                geriSayimiBaslat()
+            }
+        }
+    }
+    private val geriSayimIslemi = object : Runnable {
+        override fun run() {
+            if (kalanSaniye > 0) {
+                tasarim.constraintlayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.arkaplankırmızı))
+                tasarim.constraintLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.onkirmizi))
+                val dakika = kalanSaniye / 60
+                val saniye = kalanSaniye % 60
+                tasarim.gecendakika.text = String.format("%02d:%02d", dakika, saniye)
+                kalanSaniye--
+                handler.postDelayed(this, 1000) // 1 saniye gecikme
+            } else {
+                tasarim.constraintlayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue))
+                tasarim.constraintLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue2))
+                Toast.makeText(requireContext(),"Mola zamanı...",Toast.LENGTH_SHORT).show()
+                molaGeriSayimiBaslat()
+            }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        tasarim= FragmentPomodoroEkraniBinding.inflate(inflater,container,false)
+
+
+
+        tasarim.ayarlar.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani)
+        }
+        tasarim.baslatdurdur.setOnCheckedChangeListener{compoundButton,b->
+            if(b){
+                geriSayimiBaslat()
+            }else{
+                handler.removeCallbacks(geriSayimIslemi)
+                myHandler.removeCallbacks(molaGeriSayimIslemi)
+            }
+        }
+
+
+
+
+
+        return tasarim.root
+    }
+    private fun geriSayimiBaslat() {
+        handler.removeCallbacks(geriSayimIslemi) // Handler'ı sıfırla
+        val vt=VeriTabaniYardimcisi(requireContext())
+        val gelenData=VeriTabaniDao().ayargetir(vt)
+        for(k in gelenData){
+           kalanSaniye=5
+        }
+
+         // Saniyeleri sıfırla (2 dakika)
+        handler.post(geriSayimIslemi) // Geri sayımı başlat
+    }
+
+    private fun molaGeriSayimiBaslat(){
+        val vt=VeriTabaniYardimcisi(requireContext())
+        handler.removeCallbacks(molaGeriSayimIslemi)
+        val gelendata=VeriTabaniDao().ayargetir(vt)
+        for(k in gelendata){
+            molaKalanSaniye=5
+        }
+        myHandler.post(molaGeriSayimIslemi)
+    }
+
+
+
+}
