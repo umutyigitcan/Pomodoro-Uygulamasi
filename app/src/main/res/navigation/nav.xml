@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani"
             app:destination="@id/pomodoroSureAyarlamaEkrani" />
+        <action
+            android:id="@+id/action_pomodoroEkrani_to_gorevlerEkrani"
+            app:destination="@id/gorevlerEkrani" />
     </fragment>
     <fragment
         android:id="@+id/pomodoroSureAyarlamaEkrani"
@@ -21,6 +24,15 @@
         tools:layout="@layout/fragment_pomodoro_sure_ayarlama_ekrani" >
         <action
             android:id="@+id/action_pomodoroSureAyarlamaEkrani_to_pomodoroEkrani"
+            app:destination="@id/pomodoroEkrani" />
+    </fragment>
+    <fragment
+        android:id="@+id/gorevlerEkrani"
+        android:name="com.example.pomodoro.GorevlerEkrani"
+        android:label="fragment_gorevler_ekrani"
+        tools:layout="@layout/fragment_gorevler_ekrani" >
+        <action
+            android:id="@+id/action_gorevlerEkrani_to_pomodoroEkrani"
             app:destination="@id/pomodoroEkrani" />
     </fragment>
 </navigation>

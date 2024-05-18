@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.example.pomodoro.databinding.FragmentPomodoroEkraniBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class PomodoroEkrani : Fragment() {
@@ -20,6 +21,7 @@ class PomodoroEkrani : Fragment() {
     var zamanidurdur:Long=0
     var sayi=-1
     var molasaniye=0
+    var dersNo=1
     var toplamsaniye=0
 
     private var handler=Handler(Looper.getMainLooper())
@@ -44,6 +46,8 @@ class PomodoroEkrani : Fragment() {
                 tasarim.kronometre.stop()
                 zamanidurdur=0
                 sayi=-1
+                dersNo++
+                tasarim.dersno.text="Ders: $dersNo"
                 tasarim.constraintlayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.arkaplankırmızı))
                 tasarim.constraintLayout2.setBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.onkirmizi))
                 tasarim.kronometre.base=SystemClock.elapsedRealtime()
@@ -62,20 +66,37 @@ class PomodoroEkrani : Fragment() {
             var gelendata=VeriTabaniDao().ayargetir(vt)
             for(k in gelendata){
                 toplamsaniye=(k.pomodorosuresi)*60
-                molasaniye=(k.molasuresi)*60
+                molasaniye=(k.molasayisi)*60
             }
             handler.postDelayed(this,1000)
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         tasarim= FragmentPomodoroEkraniBinding.inflate(inflater,container,false)
+        tasarim.gorevler.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_gorevlerEkrani)
+        }
         myHandler.post(myRunnable)
-        tasarim.baslat.setOnClickListener {
-            tasarim.baslat.visibility=View.INVISIBLE
-            tasarim.durdur.visibility=View.VISIBLE
-            tasarim.kronometre.base=SystemClock.elapsedRealtime()+zamanidurdur
-            tasarim.kronometre.start()
-            handler.post(runnable)
+        tasarim.baslat.setOnClickListener {nesne->
+            var vt=VeriTabaniYardimcisi(requireContext())
+            var gelendata=VeriTabaniDao().ayargetir(vt)
+            for(k in gelendata){
+                if(k.pomodorosuresi>=1){
+                    tasarim.dersno.text="Ders: $dersNo"
+                    tasarim.baslat.visibility=View.INVISIBLE
+                    tasarim.durdur.visibility=View.VISIBLE
+                    tasarim.kronometre.base=SystemClock.elapsedRealtime()+zamanidurdur
+                    tasarim.kronometre.start()
+                    handler.post(runnable)
+                    for(a in gelendata){
+                        tasarim.pomodorosuresitasarim.text= String.format("Ders Süresi: %02d:00", a.pomodorosuresi)
+                        tasarim.molasuresitasarim.text=String.format("Mola Süresi: %02d:00", a.molasayisi)
+                    }
+                }else if(k.pomodorosuresi==0){
+                    Snackbar.make(nesne,"Ayarlar kısmından pomodoro oluşturun...",Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
         }
         tasarim.ayarlar.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani)
@@ -86,7 +107,7 @@ class PomodoroEkrani : Fragment() {
             tasarim.durdur.visibility=View.INVISIBLE
             zamanidurdur=tasarim.kronometre.base-SystemClock.elapsedRealtime()
             tasarim.kronometre.stop()
-            sayi--
+
             handler.removeCallbacks(runnable)
         }
 

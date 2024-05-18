@@ -8,6 +8,8 @@
     android:layout_height="match_parent"
     tools:context=".PomodoroSureAyarlamaEkrani">
 
+
+
     <Button
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -66,10 +68,10 @@
                 app:layout_constraintTop_toBottomOf="@id/pomodoroyazi"
                 android:background="@drawable/textviewshape"
                 android:layout_marginLeft="15dp"
-                android:text="0"
                 android:maxLength="3"
                 android:gravity="center"
                 android:textSize="25dp"
+                android:text="25"
                 android:textColor="@color/white"
                 android:id="@+id/pomodoro"/>
             <TextView
@@ -92,13 +94,16 @@
                 app:layout_constraintTop_toBottomOf="@id/molayazi"
                 android:background="@drawable/textviewshape"
                 android:layout_marginLeft="15dp"
-                android:text="0"
                 android:maxLength="3"
+                android:text="5"
                 android:inputType="number"
                 android:gravity="center"
                 android:textSize="25dp"
                 android:textColor="@color/white"
                 android:id="@+id/mola"/>
+
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,6 +111,7 @@
                 android:textSize="25dp"
                 android:textStyle="bold"
                 android:textColor="#afafaf"
+                android:visibility="invisible"
                 android:id="@+id/molatekrariyazi"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mola"
@@ -121,6 +127,7 @@
                 android:layout_marginLeft="15dp"
                 android:text="0"
                 android:maxLength="3"
+                android:visibility="invisible"
                 android:inputType="number"
                 android:gravity="center"
                 android:textSize="25dp"
