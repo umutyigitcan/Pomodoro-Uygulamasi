@@ -22,6 +22,7 @@
         android:id="@+id/istatistikler"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:visibility="invisible"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/analytics"
@@ -35,7 +36,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/list"
-        app:layout_constraintEnd_toStartOf="@id/istatistikler"
+        app:layout_constraintEnd_toStartOf="@id/ayarlar"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -150,7 +151,7 @@
                 android:background="@drawable/baseline_skip_next_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/baslat" />
+                app:layout_constraintStart_toEndOf="@id/baslat"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

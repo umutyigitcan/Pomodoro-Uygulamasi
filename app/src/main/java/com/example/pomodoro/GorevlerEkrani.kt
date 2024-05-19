@@ -63,7 +63,7 @@ class GorevlerEkrani : Fragment() {
                 }
             }
             ad.setNegativeButton("İptal"){dialogInterface, i->
-                Toast.makeText(requireContext(),"İptal Tıklandı!",Toast.LENGTH_SHORT).show()
+                
             }
             ad.create().show()
            adapter.notifyDataSetChanged()

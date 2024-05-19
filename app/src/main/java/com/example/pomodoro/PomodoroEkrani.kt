@@ -1,5 +1,7 @@
 package com.example.pomodoro
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,7 +31,7 @@ class PomodoroEkrani : Fragment() {
     private var myHandler=Handler(Looper.getMainLooper())
     private var myRunnable=object :Runnable{
         override fun run() {
-            if(sayi==toplamsaniye&&dersDurum==true){
+            if(sayi>=toplamsaniye&&dersDurum==true){
                 handler.removeCallbacks(runnable)
                 tasarim.kronometre.stop()
                 zamanidurdur=0
@@ -41,7 +43,7 @@ class PomodoroEkrani : Fragment() {
                 handler.post(runnable)
                 dersDurum=false
             }
-            if(sayi==toplamsaniye&&dersDurum==false){
+            if(sayi>=toplamsaniye&&dersDurum==false){
                 handler.removeCallbacks(runnable)
                 tasarim.kronometre.stop()
                 zamanidurdur=0
@@ -73,8 +75,22 @@ class PomodoroEkrani : Fragment() {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         tasarim= FragmentPomodoroEkraniBinding.inflate(inflater,container,false)
+        tasarim.istatistikler.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_istatistikFragment)
+        }
         tasarim.gorevler.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_gorevlerEkrani)
+            var ad=AlertDialog.Builder(requireContext())
+            ad.setMessage("Sayfa değiştirdiğiniz de pomodoro sıfırlanacak.Sayfa değiştirmek istiyor musunuz?")
+            ad.setPositiveButton("Git"){DialogInterface,i->
+                Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_gorevlerEkrani)
+            }
+            ad.setNegativeButton("İptal"){DialogInterface,i->
+
+            }
+            ad.create().show()
+        }
+        tasarim.ilerle.setOnClickListener {
+            sayi=toplamsaniye+1
         }
         myHandler.post(myRunnable)
         tasarim.baslat.setOnClickListener {nesne->
@@ -99,7 +115,15 @@ class PomodoroEkrani : Fragment() {
 
         }
         tasarim.ayarlar.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani)
+            var ad=AlertDialog.Builder(requireContext())
+            ad.setMessage("Sayfa değiştirdiğiniz de pomodoro sıfırlanacak.Sayfa değiştirmek istiyor musunuz?")
+            ad.setPositiveButton("Git"){DialogInterface,i->
+                Navigation.findNavController(it).navigate(R.id.action_pomodoroEkrani_to_pomodoroSureAyarlamaEkrani)
+            }
+            ad.setNegativeButton("İptal"){DialogInterface,i->
+
+            }
+            ad.create().show()
         }
 
         tasarim.durdur.setOnClickListener {

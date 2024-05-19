@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_pomodoroEkrani_to_gorevlerEkrani"
             app:destination="@id/gorevlerEkrani" />
+        <action
+            android:id="@+id/action_pomodoroEkrani_to_istatistikFragment"
+            app:destination="@id/istatistikFragment" />
     </fragment>
     <fragment
         android:id="@+id/pomodoroSureAyarlamaEkrani"
@@ -33,6 +36,15 @@
         tools:layout="@layout/fragment_gorevler_ekrani" >
         <action
             android:id="@+id/action_gorevlerEkrani_to_pomodoroEkrani"
+            app:destination="@id/pomodoroEkrani" />
+    </fragment>
+    <fragment
+        android:id="@+id/istatistikFragment"
+        android:name="com.example.pomodoro.IstatistikFragment"
+        android:label="fragment_istatistik"
+        tools:layout="@layout/fragment_istatistik" >
+        <action
+            android:id="@+id/action_istatistikFragment_to_pomodoroEkrani"
             app:destination="@id/pomodoroEkrani" />
     </fragment>
 </navigation>
